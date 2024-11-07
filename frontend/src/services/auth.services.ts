@@ -8,7 +8,7 @@ class AuthService {
   }): Promise<LoginResponse> {
     try {
       const response = await axiosInstance.post(
-        `http://localhost:4000/auth/login`,
+        `/auth/login`,
         {
           ...user,
         },
