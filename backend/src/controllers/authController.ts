@@ -110,8 +110,10 @@ export const login: RequestHandler = async (
       name: user.name,
     };
 
+    console.log(user,"user");
+    ;
     const token = createAccessToken(user, res);
-
+   console.log(token,"token");
     res.status(200).json({
       token,
       user: userWithoutPassword,
@@ -119,7 +121,8 @@ export const login: RequestHandler = async (
       msg: "Login successful..",
     });
   } catch (err) {
-    console.error(err);
+	  console.log(process.env.ACCESS_TOKEN_SECRET,"secret key ")
+    console.error(err,"error");
     res.status(500).json({
       status: false,
       msg: err,

@@ -2,10 +2,10 @@
 
 # Env Vars
 POSTGRES_DB="mydatabase"
-SECRET_KEY="my-secret"
-NEXT_PUBLIC_SAFE_KEY="safe-key"
-DOMAIN_NAME="dipakgiri.tech"
-EMAIL="dipakgiri.dev@gmail.com"
+SECRET_KEY="my-secret" 
+NEXT_PUBLIC_SAFE_KEY="safe-key" 
+DOMAIN_NAME="dipakgiri.tech" 
+EMAIL="dipakgiri.dev@gmail.com" 
 
 NODE_ENV='production'
 PORT=4000
@@ -60,7 +60,7 @@ fi
 sudo chmod +x /usr/local/bin/docker-compose
 sudo ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-# Verify Docker Compose
+# Verify Docker Compose 
 docker-compose --version
 if [ $? -ne 0 ]; then
     echo "Docker Compose installation failed. Exiting."

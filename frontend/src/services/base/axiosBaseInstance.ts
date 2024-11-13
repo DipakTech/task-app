@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: "https://dipakgiri.tech/api",
   // timeout: 100000,
   headers: {
     "api-key": "http://localhost:4000",
