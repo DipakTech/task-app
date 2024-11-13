@@ -1,31 +1,34 @@
-version: '3.8'  
+version: '3.8'
+
 services:
-  web-service:
+  frontend:
     build:
-      context: ./frontend/
-      dockerfile: Dockerfile  
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"  
+      - "3000:3000"
     env_file:
-      - /frontend/.env
-    networks:
-      - app-network  
-    restart: unless-stopped
+      - ./frontend/.env
+    environment:
+      - NODE_ENV=production
     depends_on:
       - backend
+    restart: unless-stopped
+    networks:
+      - app-network
 
   backend:
     build:
-      context: ./backend/
+      context: ./backend
       dockerfile: Dockerfile
-    env_file:
-      - /backend/.env
     ports:
       - "4000:4000"
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
     networks:
       - app-network
-    restart: unless-stopped  
 
-networks:  
+networks:
   app-network:
     driver: bridge
