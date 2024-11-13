@@ -10,7 +10,7 @@ interface GetTasksParams {
 
 const useGetTasks = ({ page = 1, limit = 10 }: GetTasksParams = {}) => {
   const { data, isLoading } = useQuery({
-    queryKey: [TASKS],
+    queryKey: [TASKS, page, limit], // Include page and limit in queryKey
     queryFn: () => getTasks({ page, limit }),
   });
 

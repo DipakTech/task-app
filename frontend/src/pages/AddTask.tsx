@@ -71,7 +71,7 @@ export function AddTaskPage() {
   };
 
   return (
-    <div className="max-w-lg w-full sm:w-[530px] mt-10 mx-auto p-1  sm:p-4">
+    <div className="max-w-lg w-full sm:w-[530px]  mx-auto p-1  ">
       <Card>
         <CardHeader>
           <CardTitle>Add New Task</CardTitle>

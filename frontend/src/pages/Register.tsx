@@ -86,7 +86,7 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex justify-center px-4  sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">

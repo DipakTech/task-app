@@ -4,8 +4,13 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 const useDeleteTask = () => {
-  const mutation = useMutation<unknown, unknown, string, unknown>({
-    mutationFn: (id) => deleteTask(id),
+  const mutation = useMutation<
+    unknown,
+    unknown,
+    { taskId: string; userId: string },
+    unknown
+  >({
+    mutationFn: ({ taskId, userId }) => deleteTask(taskId, userId),
     onError: () => {
       toast.error("error deleting task");
     },

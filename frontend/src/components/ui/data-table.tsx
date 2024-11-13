@@ -89,7 +89,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className=" flex  flex-col ">
+    <div className=" flex  flex-col  ">
       <div className="relative mb-4 px-2">
         <div className="flex items-center py-4">
           <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2  text-muted-foreground" />
@@ -102,7 +102,7 @@ export function DataTable<TData, TValue>({
               table?.getColumn(searchKey)?.setFilterValue(event.target.value)
             }
             className={cn(
-              "w-full h-[40px]  bg-white dark:bg-[#020817] py-4 md:max-w-sm px-10",
+              "w-full h-[40px]  bg-gray-100 dark:bg-slate-950 py-4 md:max-w-sm px-10",
               searchClassName,
             )}
           />
@@ -142,7 +142,7 @@ export function DataTable<TData, TValue>({
       </div>
       <ScrollArea
         className={cn(
-          "rounded-md border w-full p-2 bg-white dark:bg-[#020817] h-[calc(80vh-220px)]",
+          "rounded-md border w-full p-2 bg-gray-100 dark:bg-slate-950 h-[calc(80vh-220px)]",
           className,
         )}
       >

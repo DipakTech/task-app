@@ -52,7 +52,7 @@ export function EditTaskPage() {
   };
 
   return (
-    <div className="max-w-lg w-[550px] mt-10 mx-auto  sm:p-4">
+    <div className="max-w-lg w-[550px]  mx-auto  sm:p-4">
       <Card>
         <CardHeader>
           <CardTitle>Edit Task</CardTitle>

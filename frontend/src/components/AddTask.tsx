@@ -9,9 +9,9 @@ const AddTask = () => {
     <Button
       onClick={() => navigate("/tasks/new")}
       size="sm"
-      className="h-7 gap-1"
+      className="h-7 gap-1 p-4 "
     >
-      <PlusCircle className="h-3.5 w-3.5" />
+      <PlusCircle className="h-4 w-4 mr-1" />
       <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
         Add Task
       </span>

@@ -9,7 +9,8 @@ export const addTask = (task: {
   status: string;
 }) => axiosInstance.post(`/tasks`, task);
 
-export const deleteTask = (id: string) => axiosInstance.delete(`/tasks/${id}`);
+export const deleteTask = (taskId: string, userId: string) =>
+  axiosInstance.delete(`/tasks/${taskId}/${userId}`);
 
 export const updateTask = (
   id: string,
@@ -19,3 +20,5 @@ export const updateTask = (
     status?: string;
   },
 ) => axiosInstance.put(`/tasks/${id}`, task);
+
+export const getMyProfile = () => axiosInstance.get(`/auth/profile`);

@@ -29,18 +29,20 @@ import {
 } from "./ui/dropdown-menu";
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import useGetTasks from "@/hooks/useGetTasks";
-import { FullScreenLoader } from "./shared/Loader/FullScreenLoader";
+// import { FullScreenLoader } from "./shared/Loader/FullScreenLoader";
 import { CellAction } from "./shared/cell-actions";
+import TaskListSkeleton from "./ui/taskListSkeleton";
+import { Badge } from "./ui/badge";
 
 export type Task = {
   id?: string;
   title?: string;
   description?: string;
   status?: string;
+  userId?: string;
 };
 
 const TaskList = () => {
-  // Pagination state
   const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -49,9 +51,8 @@ const TaskList = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
-  // Update useGetTasks to accept pagination parameters
   const { data, isLoading } = useGetTasks({
-    page: pageIndex + 1, // Convert to 1-based index for API
+    page: pageIndex + 1,
     limit: pageSize,
   });
 
@@ -112,11 +113,11 @@ const TaskList = () => {
             "bg-gray-50 text-gray-700 border-gray-100";
 
           return (
-            <span
-              className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium border ${style}`}
+            <Badge
+              className={` rounded-full text-xs  font-medium border ${style}`}
             >
               {status}
-            </span>
+            </Badge>
           );
         },
       },
@@ -147,15 +148,15 @@ const TaskList = () => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    manualPagination: true, // Enable manual pagination
+    manualPagination: true,
   });
 
-  if (isLoading) return <FullScreenLoader show />;
+  if (isLoading) return <TaskListSkeleton />;
 
   return (
-    <div className="w-full px-2 max-w-5xl mx-auto flex flex-col mt-10">
+    <div className="w-full px-2 max-w-5xl mx-auto flex flex-col ">
       <div className="flex justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-2xl font-bold bg-gray-100 dark:bg-slate-950">
           Task List
         </h1>
         <AddTask />
@@ -205,7 +206,7 @@ const TaskList = () => {
         </div>
       </div>
 
-      <div className="border rounded-lg overflow-hidden bg-white shadow-sm">
+      <div className="border rounded-lg overflow-hidden bg-white dark:bg-slate-950 shadow-sm">
         <div className="overflow-x-auto">
           <Table className="w-full min-w-full">
             <TableHeader>
@@ -214,7 +215,7 @@ const TaskList = () => {
                   {headerGroup.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="px-4 sm:px-6 text-left text-xs sm:text-sm font-medium text-gray-500 tracking-wider transition-colors"
+                      className="px-4 sm:px-6 text-left text-xs sm:text-sm font-medium text-gray-600 tracking-wider transition-colors"
                     >
                       {header.isPlaceholder
                         ? null
@@ -227,14 +228,14 @@ const TaskList = () => {
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody className="divide-y px-4 divide-gray-200">
+            <TableBody className="divide-y px-4 ">
               {tasks.length > 0 ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} className="transition-colors">
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        className="px-2 py-1 sm:py-2 text-xs sm:text-sm text-gray-900 break-words"
+                        className="px-2 py-1 sm:py-2 text-xs sm:text-sm text-gray-500 break-words"
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
