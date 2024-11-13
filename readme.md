@@ -2,6 +2,23 @@
 
 ---
 
+## LIVE DEMO
+
+![alt text](image.png)
+
+visit https://dipakgiri.tech
+login credentials
+
+```
+for normal user:
+email: user@user.com
+password: User1@user.com
+
+for admin user:
+email: admin@admin.com
+password: Admin1@admin.com
+```
+
 # Project Setup and Deployment Guide
 
 This guide provides instructions for setting up and running the project locally, testing the backend, and deploying the application on a server. The project includes a Vite React frontend and a Node.js backend managed through Docker.
