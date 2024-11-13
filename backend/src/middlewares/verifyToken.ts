@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 import { prisma } from "../db";
 
-// Extend Express Request type to include Prisma User
 declare global {
   namespace Express {
     interface Request {
@@ -12,7 +11,6 @@ declare global {
   }
 }
 
-// Interface for JWT payload
 interface JWTPayload {
   id: string;
   iat?: number;
@@ -33,8 +31,6 @@ export const verifyAccessToken: RequestHandler = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    // Get token from cookies
-
     const token = req.cookies["authToken"];
 
     if (!token) {
@@ -45,10 +41,8 @@ export const verifyAccessToken: RequestHandler = async (
       return;
     }
 
-    // Verify token
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as JWTPayload;
 
-    // Find user using Prisma
     const user = await prisma.user.findUnique({
       where: {
         id: decoded.id,
@@ -62,8 +56,6 @@ export const verifyAccessToken: RequestHandler = async (
       });
       return;
     }
-
-    // Remove password from user object before attaching to request
     const { password, ...userWithoutPassword } = user;
     req.user = userWithoutPassword as User;
 
@@ -77,8 +69,6 @@ export const verifyAccessToken: RequestHandler = async (
       });
       return;
     }
-
-    console.error("Auth middleware error:", error);
     res.status(500).json({
       status: false,
       msg: "Internal server error",

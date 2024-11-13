@@ -205,14 +205,6 @@ export const deleteTask: RequestHandler = async (
       return;
     }
 
-    if (existingTask.userId !== user.id) {
-      res.status(403).json({
-        status: false,
-        msg: "You can't delete task of another user",
-      });
-      return;
-    }
-
     await prisma.task.delete({
       where: {
         id: taskId,

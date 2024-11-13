@@ -9,11 +9,17 @@ import {
   deleteTask,
 } from "../controllers/taskController";
 import { verifyAccessToken } from "../middlewares/verifyToken";
+import checkRole from "../middlewares/check-role";
 
 router.get("/", getTasks);
 router.get("/:taskId", verifyAccessToken, getTask);
 router.post("/", verifyAccessToken, postTask);
-router.put("/:taskId", verifyAccessToken, putTask);
-router.delete("/:taskId", verifyAccessToken, deleteTask);
+router.put("/:taskId", verifyAccessToken, checkRole("ADMIN"), putTask);
+router.delete(
+  "/:taskId/:userId",
+  verifyAccessToken,
+  checkRole("ADMIN"),
+  deleteTask,
+);
 
 export default router;

@@ -24,26 +24,23 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms"),
 );
 
-app.use("/auth", authRoutes);
-app.use("/tasks", taskRoutes);
-// app.use("/auth/profile", profileRoutes);
-
 // Basic route
 app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Hello from Express + TypeScript!" });
 });
+
+app.use("/auth", authRoutes);
+app.use("/tasks", taskRoutes);
 
 // Health check endpoint
 app.get("/health", (req: Request, res: Response) => {
   res.json({ status: "OK" });
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
-
-export interface ErrorResponse {
-  message: string;
-  status: number;
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  });
 }
+
+export default app;

@@ -72,7 +72,6 @@ export const login: RequestHandler = async (
 ): Promise<void> => {
   try {
     const { email, password } = req.body;
-    console.log(req.body, "request body..");
 
     if (!email || !password) {
       res.status(400).json({
@@ -125,6 +124,23 @@ export const login: RequestHandler = async (
       status: false,
       msg: err,
     });
+  }
+};
+
+export const profile: RequestHandler = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const user = req.user;
+    if (!user) {
+      res.status(401).json({ msg: "Unauthorized" });
+      return;
+    }
+    res.status(200).json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
