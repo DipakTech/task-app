@@ -1,18 +1,21 @@
+**task manager**
+
 ---
+
 # Project Setup and Deployment Guide
+
+This guide provides instructions for setting up and running the project locally, testing the backend, and deploying the application on a server. The project includes a Vite React frontend and a Node.js backend managed through Docker.
+
 ---
-
-## Project Setup and Deployment Guide
-
-` This guide will help you set up and run the project locally using Docker as well as deploy it on a server. The project includes a Vite React frontend and a Node.js backend, both managed with Docker containers.`
 
 ## Table of Contents
 
 1. [Requirements](#requirements)
 2. [Local Setup](#local-setup)
-3. [Deployment Guide for Server](#deployment-guide-for-server)
-4. [Environment Variables](#environment-variables)
-5. [Troubleshooting](#troubleshooting)
+3. [Running Backend Tests](#running-backend-tests)
+4. [Deployment Guide for Server](#deployment-guide-for-server)
+5. [Environment Variables](#environment-variables)
+6. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -21,8 +24,7 @@
 - **Docker**: Required to containerize and run the application.
 - **Docker Compose**: Manages the multi-container setup.
 - **Git**: For cloning the repository.
-
-> **Note:** The `deploy.sh` script will install Docker and Docker Compose if not already installed when deploying to a server.
+- **Node.js and npm**: Required for local development and running tests.
 
 ---
 
@@ -77,6 +79,39 @@ To run the project locally using Docker:
    - **Backend API**: http://localhost:4000/api
 
    > **Note:** The `docker-compose.yml` file handles container networking, so the frontend will automatically connect to the backend API.
+
+---
+
+### Running Backend Tests
+
+To run backend tests locally:
+
+1. **Install Dependencies** (If not using Docker):
+
+   ```bash
+   cd backend
+   npm install
+   ```
+
+2. **Run Tests**
+
+   - Use the following command to run the test suite defined in the `package.json`:
+     ```bash
+     npm test
+     ```
+     This runs Jest tests based on the configuration in `jest.config.cjs`.
+
+3. **Additional Test Commands**:
+   - Run tests with a custom Jest configuration:
+     ```bash
+     npx jest --config jest.config.js
+     ```
+   - For development testing with TypeScript:
+     ```bash
+     npm run dev
+     ```
+
+> **Note:** Ensure that environment variables required for tests are set up in `.env` or use a test-specific `.env.test` file if needed.
 
 ---
 
@@ -150,6 +185,4 @@ For any configuration changes, repeat the steps for updating environment variabl
 
 ---
 
-This guide provides step-by-step instructions for running and deploying the application. For additional help, refer to the logs in the troubleshooting section.
-
-Let me know if you need further details!
+This guide provides step-by-step instructions for running and deploying the application, including backend testing. For additional help, refer to the logs in the troubleshooting section.
