@@ -21,6 +21,7 @@ import { addTask } from "@/services/task.services";
 import { toast } from "react-toastify";
 import { queryClient } from "@/main";
 import { useNavigate } from "react-router-dom";
+import { taskSchema } from "@/validations/task";
 
 export type Task = {
   title: string;
@@ -34,24 +35,46 @@ export function AddTaskPage() {
     description: "",
     status: "",
   });
+  const [errors, setErrors] = useState<{
+    title?: string;
+    description?: string;
+    status?: string;
+  }>({});
   const [isPending, startTransition] = useTransition();
-
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const result = taskSchema.safeParse(newTask);
+
+    if (!result.success) {
+      const fieldErrors: {
+        title?: string;
+        description?: string;
+        status?: string;
+      } = {};
+      result.error.issues.forEach((issue) => {
+        const path = issue.path[0] as keyof typeof fieldErrors;
+        fieldErrors[path] = issue.message;
+      });
+      setErrors(fieldErrors);
+      toast.error("Error adding task. Please fix the highlighted fields.");
+      return;
+    }
+
+    setErrors({});
 
     const postTask = async () => {
       try {
         await addTask(newTask);
         toast.success("Task added successfully");
         setNewTask({ title: "", description: "", status: "" });
-        queryClient.invalidateQueries({
-          queryKey: ["TASKS"],
-        });
+        queryClient.invalidateQueries({ queryKey: ["TASKS"] });
         navigate("/");
-      } catch {
-        toast.error("Failed to add task");
+      } catch (error) {
+        console.log(error);
+        toast.error("Failed to add task. Please try again later.");
       }
     };
 
@@ -64,14 +87,12 @@ export function AddTaskPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { id, value } = e.target;
-    setNewTask((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+    setNewTask((prev) => ({ ...prev, [id]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [id]: undefined }));
   };
 
   return (
-    <div className="max-w-lg w-full sm:w-[530px]  mx-auto p-1  ">
+    <div className="max-w-lg w-full sm:w-[530px] mx-auto p-1">
       <Card>
         <CardHeader>
           <CardTitle>Add New Task</CardTitle>
@@ -89,8 +110,11 @@ export function AddTaskPage() {
                   value={newTask.title}
                   onChange={handleInputChange}
                   placeholder="Enter task title"
-                  required
+                  className={`${errors.title ? "border-red-500" : ""}`}
                 />
+                {errors.title && (
+                  <p className="text-sm text-red-500">{errors.title}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -100,20 +124,30 @@ export function AddTaskPage() {
                   value={newTask.description}
                   onChange={handleInputChange}
                   placeholder="Enter task description"
-                  className="min-h-[100px]"
-                  required
+                  className={`min-h-[100px] ${
+                    errors.description ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.description && (
+                  <p className="text-sm text-red-500">{errors.description}</p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>
                 <Select
                   value={newTask.status}
-                  onValueChange={(value) =>
-                    setNewTask((prev) => ({ ...prev, status: value }))
-                  }
+                  onValueChange={(value) => {
+                    setNewTask((prev) => ({ ...prev, status: value }));
+                    setErrors((prevErrors) => ({
+                      ...prevErrors,
+                      status: undefined,
+                    }));
+                  }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger
+                    className={`${errors.status ? "border-red-500" : ""}`}
+                  >
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -122,6 +156,9 @@ export function AddTaskPage() {
                     <SelectItem value="COMPLETED">Completed</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.status && (
+                  <p className="text-sm text-red-500">{errors.status}</p>
+                )}
               </div>
             </div>
 

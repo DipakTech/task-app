@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import auth from "@/services/auth.services";
 import { Link, useNavigate } from "react-router-dom";
-import { registerSchema } from "@/validations/registerValidation";
+import { registerSchema } from "@/validations/auth";
 import { toast } from "react-toastify";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -40,7 +40,6 @@ const RegisterPage: React.FC = () => {
   const handleRegisterSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate form data
     const result = registerSchema.safeParse(registerForm);
 
     if (!result.success) {
@@ -58,15 +57,11 @@ const RegisterPage: React.FC = () => {
       try {
         const response = await auth.register(registerForm);
         console.log(response, "response..");
-
-        // Reset form and display success message
         setRegisterForm({ name: "", email: "", password: "" });
         toast.success("Account created successfully");
 
-        // Redirect to login page
         navigate("/login");
       } catch (error) {
-        // Handle any errors that occur during registration
         console.error("Registration error:", error);
         toast.error("Failed to create account. Please try again.");
       }
@@ -79,14 +74,20 @@ const RegisterPage: React.FC = () => {
 
   const handleRegisterChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
+
     setRegisterForm((prev) => ({
       ...prev,
       [name]: value,
     }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: undefined,
+    }));
   };
 
   return (
-    <div className="flex justify-center px-4  sm:px-6 lg:px-8">
+    <div className="flex justify-center px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
@@ -100,7 +101,7 @@ const RegisterPage: React.FC = () => {
         <CardContent>
           <form onSubmit={handleRegisterSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="register-name">name</Label>
+              <Label htmlFor="register-name">Name</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
@@ -125,7 +126,6 @@ const RegisterPage: React.FC = () => {
                 <Input
                   id="register-email"
                   name="email"
-                  type="email"
                   className={`pl-9 ${errors.email ? "border-red-500" : ""}`}
                   placeholder="name@example.com"
                   value={registerForm.email}

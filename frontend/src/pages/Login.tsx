@@ -11,51 +11,39 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-
+import { toast } from "react-toastify";
+import { z } from "zod";
+import { Link, useNavigate } from "react-router-dom";
 import auth from "@/services/auth.services";
 import { useAuthStore } from "@/store/auth";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { loginSchema } from "@/validations/auth";
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
-
-interface FormErrors {
-  email?: string;
-  password?: string;
-}
+type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {},
+  );
   const navigate = useNavigate();
-
   const { login } = useAuthStore();
   const [isPending, startTransition] = useTransition();
-
   const [loginForm, setLoginForm] = useState<LoginFormData>({
     email: "",
     password: "",
   });
 
-  const validateForm = (): FormErrors => {
-    const newErrors: FormErrors = {};
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginForm.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-    if (loginForm.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters long";
-    }
-    return newErrors;
-  };
-
   const handleLoginSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    const result = loginSchema.safeParse(loginForm);
+
+    if (!result.success) {
+      const newErrors: { email?: string; password?: string } = {};
+      result.error.issues.forEach((issue) => {
+        const path = issue.path[0] as keyof typeof newErrors;
+        newErrors[path] = issue.message;
+      });
+      setErrors(newErrors);
       return;
     }
 
@@ -76,13 +64,14 @@ const LoginPage: React.FC = () => {
     });
   };
 
-  const handleLoginChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleLoginChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginForm((prev) => ({ ...prev, [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
   };
 
   return (
-    <div className="flex justify-center px-4  sm:px-6 lg:px-8">
+    <div className="flex justify-center px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
@@ -102,7 +91,6 @@ const LoginPage: React.FC = () => {
                 <Input
                   id="login-email"
                   name="email"
-                  type="email"
                   placeholder="name@example.com"
                   className={`pl-9 ${errors.email ? "border-red-500" : ""}`}
                   value={loginForm.email}
