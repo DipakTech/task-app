@@ -20,7 +20,7 @@ export function Loader({ show, wrapperClass, loaderClass }: IProps) {
       )}
     >
       <Loader2
-        className={cn("animate-spin w-10 h-10 text-primary", loaderClass)}
+        className={cn("animate-spin w-5 h-5 text-primary", loaderClass)}
       />
     </div>
   );

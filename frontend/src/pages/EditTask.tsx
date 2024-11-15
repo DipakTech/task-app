@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useUpdateTask from "@/hooks/useUpdateTask";
+import { Loader } from "@/components/shared/Loader/BaseLoader";
 
 export function EditTaskPage() {
   const { id } = useParams();
@@ -110,8 +111,23 @@ export function EditTaskPage() {
             </div>
 
             <div className="flex gap-4">
-              <Button type="submit" className="flex-1">
-                Update Task
+              <Button
+                type="submit"
+                className="flex-1"
+                disabled={updateTask.isPending}
+              >
+                {updateTask.isPending ? (
+                  <p className="flex items-center justify-center gap-2">
+                    <Loader
+                      show
+                      wrapperClass="text-gray-500"
+                      loaderClass="text-gray-500"
+                    />
+                    <span>Updating task</span>
+                  </p>
+                ) : (
+                  "Update"
+                )}
               </Button>
               <Button
                 type="button"

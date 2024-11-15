@@ -54,7 +54,7 @@ export default function Header() {
                   ) : (
                     <Button
                       variant="outline"
-                      className="bg-transparent py-1"
+                      className="text-md bg-black text-white dark:text-slate-300"
                       onClick={handleLogout}
                       Icon={ArrowRightIcon}
                       iconPlacement="right"

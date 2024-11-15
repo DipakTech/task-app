@@ -29,10 +29,10 @@ import {
 } from "./ui/dropdown-menu";
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import useGetTasks from "@/hooks/useGetTasks";
-// import { FullScreenLoader } from "./shared/Loader/FullScreenLoader";
 import { CellAction } from "./shared/cell-actions";
 import TaskListSkeleton from "./ui/taskListSkeleton";
 import { Badge } from "./ui/badge";
+import { useAuthStore } from "@/store/auth";
 
 export type Task = {
   id?: string;
@@ -50,6 +50,8 @@ const TaskList = () => {
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+
+  const { isAuth, token } = useAuthStore();
 
   const { data, isLoading } = useGetTasks({
     page: pageIndex + 1,
@@ -124,10 +126,12 @@ const TaskList = () => {
       {
         id: "actions",
         accessorKey: "Actions",
-        cell: ({ row }) => <CellAction data={row.original} />,
+        cell: ({ row }) => (
+          <> {isAuth && token ? <CellAction data={row.original} /> : null}</>
+        ),
       },
     ],
-    [],
+    [isAuth, token],
   );
 
   const table = useReactTable({
@@ -159,7 +163,7 @@ const TaskList = () => {
         <h1 className="text-2xl sm:text-2xl font-bold bg-gray-100 dark:bg-slate-950">
           Task List
         </h1>
-        <AddTask />
+        {isAuth && token && <AddTask />}
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center mb-6">
@@ -215,7 +219,7 @@ const TaskList = () => {
                   {headerGroup.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="px-4 sm:px-6 text-left text-xs sm:text-sm font-medium text-gray-600 tracking-wider transition-colors"
+                      className="px-4 sm:px-6 text-left text-xs sm:text-sm font-medium text-gray-500 tracking-wider transition-colors"
                     >
                       {header.isPlaceholder
                         ? null
@@ -235,7 +239,7 @@ const TaskList = () => {
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        className="px-2 py-1 sm:py-2 text-xs sm:text-sm text-gray-500 break-words"
+                        className="px-2 py-1 sm:py-2 text-xs sm:text-sm dark:text-gray-400 break-words"
                       >
                         {flexRender(
                           cell.column.columnDef.cell,

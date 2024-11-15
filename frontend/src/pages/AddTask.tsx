@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -17,11 +17,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { addTask } from "@/services/task.services";
 import { toast } from "react-toastify";
 import { queryClient } from "@/main";
 import { useNavigate } from "react-router-dom";
 import { taskSchema } from "@/validations/task";
+import useAddTask from "@/hooks/useAddTask";
+import { Loader } from "@/components/shared/Loader/BaseLoader";
 
 export type Task = {
   title: string;
@@ -35,15 +36,17 @@ export function AddTaskPage() {
     description: "",
     status: "",
   });
+
+  const taskAddMutation = useAddTask();
+
   const [errors, setErrors] = useState<{
     title?: string;
     description?: string;
     status?: string;
   }>({});
-  const [isPending, startTransition] = useTransition();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const result = taskSchema.safeParse(newTask);
@@ -62,25 +65,17 @@ export function AddTaskPage() {
       toast.error("Error adding task. Please fix the highlighted fields.");
       return;
     }
-
     setErrors({});
 
-    const postTask = async () => {
-      try {
-        await addTask(newTask);
-        toast.success("Task added successfully");
-        setNewTask({ title: "", description: "", status: "" });
-        queryClient.invalidateQueries({ queryKey: ["TASKS"] });
-        navigate("/");
-      } catch (error) {
-        console.log(error);
-        toast.error("Failed to add task. Please try again later.");
-      }
-    };
-
-    startTransition(() => {
-      postTask();
-    });
+    try {
+      await taskAddMutation.mutateAsync(newTask);
+      setNewTask({ title: "", description: "", status: "" });
+      queryClient.invalidateQueries({ queryKey: ["TASKS"] });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to add task. Please try again later.");
+    }
   };
 
   const handleInputChange = (
@@ -113,7 +108,7 @@ export function AddTaskPage() {
                   className={`${errors.title ? "border-red-500" : ""}`}
                 />
                 {errors.title && (
-                  <p className="text-sm text-red-500">{errors.title}</p>
+                  <p className="text-xs text-red-500">{errors.title}</p>
                 )}
               </div>
 
@@ -129,7 +124,7 @@ export function AddTaskPage() {
                   }`}
                 />
                 {errors.description && (
-                  <p className="text-sm text-red-500">{errors.description}</p>
+                  <p className="text-xs text-red-500">{errors.description}</p>
                 )}
               </div>
 
@@ -157,13 +152,28 @@ export function AddTaskPage() {
                   </SelectContent>
                 </Select>
                 {errors.status && (
-                  <p className="text-sm text-red-500">{errors.status}</p>
+                  <p className="text-xs text-red-500">{errors.status}</p>
                 )}
               </div>
             </div>
 
-            <Button type="submit" disabled={isPending} className="w-full">
-              {isPending ? "Adding Task..." : "Add Task"}
+            <Button
+              type="submit"
+              disabled={taskAddMutation.isPending}
+              className="w-full"
+            >
+              {taskAddMutation.isPending ? (
+                <p className="flex items-center justify-center gap-2">
+                  <Loader
+                    show
+                    wrapperClass="text-gray-500"
+                    loaderClass="text-gray-500"
+                  />
+                  <span>Adding task</span>
+                </p>
+              ) : (
+                "Add Task"
+              )}
             </Button>
           </form>
         </CardContent>
