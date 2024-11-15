@@ -28,11 +28,11 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
-import useGetTasks from "@/hooks/useGetTasks";
 import { CellAction } from "./shared/cell-actions";
 import TaskListSkeleton from "./ui/taskListSkeleton";
 import { Badge } from "./ui/badge";
 import { useAuthStore } from "@/store/auth";
+import { useGetTasks } from "@/hooks/useGetTasks";
 
 export type Task = {
   id?: string;

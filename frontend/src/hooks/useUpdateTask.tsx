@@ -4,7 +4,7 @@ import { updateTask } from "@/services/task.services";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-const useUpdateTask = () => {
+export const useUpdateTask = () => {
   const mutation = useMutation<
     unknown,
     unknown,
@@ -26,5 +26,3 @@ const useUpdateTask = () => {
 
   return mutation;
 };
-
-export default useUpdateTask;

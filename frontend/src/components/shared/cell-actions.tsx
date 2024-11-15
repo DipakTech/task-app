@@ -9,11 +9,11 @@ import {
 
 import { CheckIcon, File, FileInput, MoreVertical } from "lucide-react";
 import { Task } from "../TaskList";
-import useDeleteTask from "@/hooks/useDeleteTask";
 
 import { useNavigate } from "react-router-dom";
-import useUpdateTask from "@/hooks/useUpdateTask";
-import useGetMyProfile from "@/hooks/useGetMyProfile";
+import { useDeleteTask } from "@/hooks/useDeleteTask";
+import { useUpdateTask } from "@/hooks/useUpdateTask";
+import { useGetMyProfile } from "@/hooks/useGetMyProfile";
 
 interface CellActionProps {
   data: Task;

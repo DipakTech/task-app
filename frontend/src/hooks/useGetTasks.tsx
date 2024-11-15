@@ -8,7 +8,7 @@ interface GetTasksParams {
   limit?: number;
 }
 
-const useGetTasks = ({ page = 1, limit = 10 }: GetTasksParams = {}) => {
+export const useGetTasks = ({ page = 1, limit = 10 }: GetTasksParams = {}) => {
   const { data, isLoading } = useQuery({
     queryKey: [TASKS, page, limit], // Include page and limit in queryKey
     queryFn: () => getTasks({ page, limit }),
@@ -19,5 +19,3 @@ const useGetTasks = ({ page = 1, limit = 10 }: GetTasksParams = {}) => {
     isLoading,
   };
 };
-
-export default useGetTasks;

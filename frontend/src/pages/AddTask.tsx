@@ -21,8 +21,8 @@ import { toast } from "react-toastify";
 import { queryClient } from "@/main";
 import { useNavigate } from "react-router-dom";
 import { taskSchema } from "@/validations/task";
-import useAddTask from "@/hooks/useAddTask";
 import { Loader } from "@/components/shared/Loader/BaseLoader";
+import { useAddTask } from "@/hooks/useAddTask";
 
 export type Task = {
   title: string;

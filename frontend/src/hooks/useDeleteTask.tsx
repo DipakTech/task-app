@@ -3,7 +3,7 @@ import { deleteTask } from "@/services/task.services";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-const useDeleteTask = () => {
+export const useDeleteTask = () => {
   const mutation = useMutation<
     unknown,
     unknown,
@@ -25,5 +25,3 @@ const useDeleteTask = () => {
 
   return mutation;
 };
-
-export default useDeleteTask;

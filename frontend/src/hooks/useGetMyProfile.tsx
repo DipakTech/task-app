@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const TASKS = "my-profile-info";
 
-const useGetMyProfile = () => {
+export const useGetMyProfile = () => {
   const { data, isLoading } = useQuery({
     queryKey: [TASKS],
     queryFn: () => getMyProfile(),
@@ -14,5 +14,3 @@ const useGetMyProfile = () => {
     isFetching: isLoading,
   };
 };
-
-export default useGetMyProfile;

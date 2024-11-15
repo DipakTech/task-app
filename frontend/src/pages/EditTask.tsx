@@ -18,8 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useUpdateTask from "@/hooks/useUpdateTask";
 import { Loader } from "@/components/shared/Loader/BaseLoader";
+import { useUpdateTask } from "@/hooks/useUpdateTask";
 
 export function EditTaskPage() {
   const { id } = useParams();
